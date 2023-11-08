@@ -1,0 +1,40 @@
+/* CSS for the popup */
+#coupon-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1em;
+    background-color: #181818; /* updated background color */
+    color: #FFFFFF; /* updated text color */
+    text-align: center;
+    z-index: 1000;
+    font-size: 16px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#coupon-popup .close-button {
+    position: absolute;
+    right: 1em;
+    top: 0.5em;
+    width: 1.5em;
+    height: 1.5em;
+    text-align: center;
+    cursor: pointer;
+    background-color: #0E9C4B; /* updated button color */
+    color: #FFFFFF; /* updated text color */
+    border-radius: 50%;
+    line-height: 1.5em;
+    font-size: 14px;
+}
+
+/* CSS for the fade-out animation */
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+.fade-out {
+    animation-name: fadeOut;
+    animation-duration: 2s;
+}
