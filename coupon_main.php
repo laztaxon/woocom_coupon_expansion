@@ -10,10 +10,11 @@ Author URI: http://www.cello.design
 //Prevent direct access to this file
 defined('ABSPATH') or die('Bug off!');
 
-// Enqueue the CSS file
-add_action('wp_enqueue_scripts', 'enqueue_coupon_styles');
-function enqueue_coupon_styles() {
+// Enqueue the CSS and JavaScript files
+add_action('wp_enqueue_scripts', 'enqueue_coupon_assets');
+function enqueue_coupon_assets() {
     wp_enqueue_style('coupon_styles', plugin_dir_url(__FILE__) . 'coupon_style.css');
+    wp_enqueue_script('coupon_script', plugin_dir_url(__FILE__) . 'coupon.js', array('jquery'), '1.0', true);
 }
 
 // Add a custom field for coupon percentage in the coupon edit form
@@ -86,26 +87,22 @@ function custom_coupon_logic() {
     add_action('woocommerce_applied_coupon', 'custom_coupon_applied_message');
 
     // Function to display a custom message when a coupon is applied
-    function custom_coupon_applied_message($coupon_code) {
-         // Create a new coupon object
-        $coupon = new WC_Coupon($coupon_code);
+// Note: Removed the echo for the inline script, as this will be handled by the external JS file
+add_action('woocommerce_applied_coupon', 'custom_coupon_applied_message');
+function custom_coupon_applied_message($coupon_code) {
+    // Create a new coupon object
+    $coupon = new WC_Coupon($coupon_code);
 
-        // Get the custom coupon percentage from the coupon's meta data
-        $custom_coupon_percentage = get_post_meta($coupon->get_id(), 'custom_coupon_percentage', true);
+    // Get the custom coupon percentage from the coupon's meta data
+    $custom_coupon_percentage = get_post_meta($coupon->get_id(), 'custom_coupon_percentage', true);
 
-        // If the custom coupon percentage is not empty
-        if (!empty($custom_coupon_percentage)) {
-            // Format the message
-            $message = sprintf(__('This coupon will add a %s%% discount to your most expensive item!', 'your-text-domain'), $custom_coupon_percentage);
+    // If the custom coupon percentage is not empty
+    if (!empty($custom_coupon_percentage)) {
+        // Format the message
+        $message = sprintf(__('This coupon will add a %s%% discount to your most expensive item!', 'your-text-domain'), $custom_coupon_percentage);
 
         // Display the message in a div with id "coupon-popup"
         echo '<div id="coupon-popup">' . $message . '</div>';
-
-        // Add a script to fade out the message after 2 seconds
-        echo '<script type="text/javascript">
-            setTimeout(function() {
-                document.getElementById("coupon-popup").classList.add("fade-out");
-            }, 2000);
-        </script>';
     }
+}
 }

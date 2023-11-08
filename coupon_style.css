@@ -11,6 +11,7 @@
     z-index: 1000;
     font-size: 16px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    opacity: 1; /* Set initial opacity for the fade-out effect */
 }
 
 #coupon-popup .close-button {
@@ -37,4 +38,5 @@
 .fade-out {
     animation-name: fadeOut;
     animation-duration: 2s;
+    animation-fill-mode: forwards; /* Ensure the opacity remains at 0 after the animation */
 }
