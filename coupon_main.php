@@ -10,12 +10,18 @@ Author URI: http://www.cello.design
 //Prevent direct access to this file
 defined('ABSPATH') or die('Bug off!');
 
-// Enqueue the CSS and JavaScript files
-add_action('wp_enqueue_scripts', 'enqueue_coupon_assets');
 function enqueue_coupon_assets() {
+    // Enqueue styles and scripts for the front-end
     wp_enqueue_style('coupon_styles', plugin_dir_url(__FILE__) . 'coupon_style.css');
     wp_enqueue_script('coupon_script', plugin_dir_url(__FILE__) . 'coupon.js', array('jquery'), '1.0', true);
+
+    // Enqueue styles and scripts for the admin area
+    add_action('admin_enqueue_scripts', function() {
+        wp_enqueue_style('admin_coupon_styles', plugin_dir_url(__FILE__) . 'coupon_style.css');
+        wp_enqueue_script('admin_coupon_script', plugin_dir_url(__FILE__) . 'coupon.js', array('jquery'), '1.0', true);
+    });
 }
+add_action('wp_enqueue_scripts', 'enqueue_coupon_assets');
 
 // Add a custom field for coupon percentage in the coupon edit form
 add_action('woocommerce_coupon_options', 'custom_coupon_percentage_field', 10, 2);
