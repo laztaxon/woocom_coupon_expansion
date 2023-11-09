@@ -116,4 +116,3 @@ function custom_coupon_applied_message($coupon_code) {
         echo '<div id="coupon-popup">' . $message . '</div>';
     }
 }
-}
