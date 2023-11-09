@@ -29,9 +29,9 @@ function custom_coupon_percentage_field($coupon_id, $coupon) {
     // Create a custom input field for the coupon percentage
     woocommerce_wp_text_input(array(
         'id' => 'custom_coupon_percentage',
-        'label' => __('Coupon Percentage', 'your-text-domain'),
+        'label' => __('Coupon Percentage', 'woocommerce-custom-coupon'),
         'desc_tip' => 'true',
-        'description' => __('Enter the custom coupon percentage discount.', 'your-text-domain'),
+        'description' => __('Enter the custom coupon percentage discount.', 'woocommerce-custom-coupon'),
         'type' => 'number', 
         'class' => 'short',
         'custom_attributes' => array(
@@ -54,6 +54,8 @@ function save_custom_coupon_percentage_field($post_id, $coupon) {
 add_action('woocommerce_before_cart', 'custom_coupon_logic');
 function custom_coupon_logic() {
     global $woocommerce;
+
+    error_log('custom_coupon_logic started');
 
     // Check if WooCommerce and the cart object exist
     if(!is_object($woocommerce) || !is_object($woocommerce->cart)){
@@ -83,12 +85,15 @@ function custom_coupon_logic() {
     }
 
     // Calculate the discount based on the price of the most expensive item and the custom coupon percentage
+    error_log('Most expensive item: ' . print_r($max_item, true));
     // Assuming 'custom_coupon_percentage' is a percentage value (0-100)
     $discount = $max_price * (get_post_meta($max_item['product_id'], 'custom_coupon_percentage', true) / 100);
 
     // Apply the discount to the cart as a negative fee
-    $woocommerce->cart->add_fee(__('Discount', 'your-text-domain'), -$discount);
-
+    error_log('Discount: ' . $discount);
+    $woocommerce->cart->add_fee(__('Discount', 'woocommerce-custom-coupon'), -$discount);
+    error_log('custom_coupon_logic ended');
+    }   
     // Add an action to display a custom message when a coupon is applied
     add_action('woocommerce_applied_coupon', 'custom_coupon_applied_message');
 
@@ -105,7 +110,7 @@ function custom_coupon_applied_message($coupon_code) {
     // If the custom coupon percentage is not empty
     if (!empty($custom_coupon_percentage)) {
         // Format the message
-        $message = sprintf(__('This coupon will add a %s%% discount to your most expensive item!', 'your-text-domain'), $custom_coupon_percentage);
+        $message = sprintf(__('This coupon will add a %s%% discount to your most expensive item!', 'woocommerce-custom-coupon'), $custom_coupon_percentage);
 
         // Display the message in a div with id "coupon-popup"
         echo '<div id="coupon-popup">' . $message . '</div>';
